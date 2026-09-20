@@ -1,0 +1,28 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="2.6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <linearGradient id="diamondStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6fe3ff" />
+      <stop offset="100%" stop-color="#c9ff5c" />
+    </linearGradient>
+  </defs>
+
+  <path d="M50 6 L94 50 L50 94 L6 50 Z" fill="#0a0b12" stroke="url(#diamondStroke)" stroke-width="3" filter="url(#glow)" />
+
+  <line x1="50" y1="10" x2="50" y2="90" stroke="#262838" stroke-width="1.5" stroke-dasharray="3 4" />
+
+  <path d="M22 51 L38 65 L44 38" fill="none" stroke="#c9ff5c" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" />
+
+  <g stroke="#ff5c7a" stroke-width="6" stroke-linecap="round" filter="url(#glow)">
+    <line x1="58" y1="38" x2="76" y2="62" />
+    <line x1="76" y1="38" x2="58" y2="62" />
+  </g>
+
+  <circle cx="50" cy="50" r="4.5" fill="#ece9e3" filter="url(#glow)" />
+</svg>

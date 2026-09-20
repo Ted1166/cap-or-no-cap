@@ -16,6 +16,7 @@ function App() {
   const [round, setRound] = useState<RoundData | null>(null);
   const [result, setResult] = useState<GuessResult | null>(null);
   const [streak, setStreak] = useState(0);
+  const [guessing, setGuessing] = useState(false);
 
   const [dailyRounds, setDailyRounds] = useState<RoundData[]>([]);
   const [dailyIndex, setDailyIndex] = useState(0);
@@ -47,14 +48,19 @@ function App() {
   }
 
   async function handleGuess(guess: Guess) {
-    if (!round) return;
-    const res = await submitGuess(round.roundId, guess);
-    setResult(res);
+    if (!round || guessing) return;
+    setGuessing(true);
+    try {
+      const res = await submitGuess(round.roundId, guess);
+      setResult(res);
 
-    if (mode === "streak") {
-      setStreak(res.correct ? streak + 1 : 0);
-    } else {
-      setDailyResults([...dailyResults, res.correct]);
+      if (mode === "streak") {
+        setStreak(res.correct ? streak + 1 : 0);
+      } else {
+        setDailyResults([...dailyResults, res.correct]);
+      }
+    } finally {
+      setGuessing(false);
     }
   }
 
@@ -80,6 +86,7 @@ function App() {
     <>
       <header className="topbar">
         <div className="wordmark">
+          <img src="/logo.svg" alt="" className="logo-mark" />
           CAP <span className="or">or</span> NO CAP
         </div>
         <div className="mode-switch">
@@ -109,7 +116,7 @@ function App() {
           <CategoryPicker selected={category} onSelect={setCategory} onStart={startStreakRound} />
         )}
         {screen === "duel" && round && (
-          <Duel round={round} result={result} onGuess={handleGuess} onNext={handleNext} nextLabel={nextLabel} />
+          <Duel round={round} result={result} onGuess={handleGuess} onNext={handleNext} nextLabel={nextLabel} guessing={guessing} />
         )}
         {screen === "dailyResult" && <DailyResult date={dailyDate} results={dailyResults} />}
       </main>

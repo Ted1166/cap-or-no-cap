@@ -81,6 +81,17 @@ body::before {
   text-shadow: 0 0 18px var(--cyan-glow);
 }
 
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  width: 32px;
+  height: 32px;
+}
+
 .wordmark .or {
   color: var(--slate);
   font-weight: 500;
@@ -345,6 +356,13 @@ main {
   color: var(--coral);
   box-shadow: 0 0 22px var(--coral-glow);
   transform: translateY(-1px);
+}
+
+.guess-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 .verdict {

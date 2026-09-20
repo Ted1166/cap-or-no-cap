@@ -1,5 +1,3 @@
-const fetch = require("node-fetch");
-
 function fmt(n) {
     if (typeof n !== "number") return String(n);
     if (Math.abs(n) >= 1e9) return `$${(n / 1e9).toFixed(2)}B`;
@@ -40,7 +38,7 @@ In ONE short sentence (under 25 words), say why this result makes sense given wh
         const text = data?.content?.find((b) => b.type === "text")?.text;
         return text?.trim() || templateFallback({ label, winner, loser });
     } catch (err) {
-        console.error("Explain call failed:", err.message);
+        console.error("Explain call failed:", err.message, err.cause ?? "");
         return templateFallback({ label, winner, loser });
     }
 }

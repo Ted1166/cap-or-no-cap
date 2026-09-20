@@ -7,9 +7,10 @@ interface Props {
     onGuess: (g: Guess) => void;
     onNext: () => void;
     nextLabel: string;
+    guessing: boolean;
 }
 
-export function Duel({ round, result, onGuess, onNext, nextLabel }: Props) {
+export function Duel({ round, result, onGuess, onNext, nextLabel, guessing }: Props) {
     return (
         <section className="panel">
             <div className="field-label">
@@ -35,10 +36,10 @@ export function Duel({ round, result, onGuess, onNext, nextLabel }: Props) {
 
             {!result && (
                 <div className="guess-row">
-                    <button className="guess-btn higher" onClick={() => onGuess("higher")}>
+                    <button className="guess-btn higher" onClick={() => onGuess("higher")} disabled={guessing}>
                         ▲ Higher
                     </button>
-                    <button className="guess-btn lower" onClick={() => onGuess("lower")}>
+                    <button className="guess-btn lower" onClick={() => onGuess("lower")} disabled={guessing}>
                         ▼ No Cap
                     </button>
                 </div>

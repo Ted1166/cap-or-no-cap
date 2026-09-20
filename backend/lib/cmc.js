@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 
 const BASE = "https://pro-api.coinmarketcap.com";
 const CACHE_MS = 90 * 1000;
@@ -78,10 +77,13 @@ async function getDerivativesExchanges(limit = 100) {
 
 const DEX_TARGETS = [
     { network_slug: "ethereum", dex_slug: "uniswap-v3" },
-    { network_slug: "bsc", dex_slug: "pancakeswap-v3" },
+    { network_slug: "ethereum", dex_slug: "sushiswap" },
     { network_slug: "solana", dex_slug: "raydium" },
+    { network_slug: "solana", dex_slug: "orca" },
     { network_slug: "base", dex_slug: "uniswap-v3" },
+    { network_slug: "base", dex_slug: "baseswap" },
     { network_slug: "arbitrum", dex_slug: "uniswap-v3" },
+    { network_slug: "arbitrum", dex_slug: "camelot" },
 ];
 
 async function getDexListings(limit = 100) {

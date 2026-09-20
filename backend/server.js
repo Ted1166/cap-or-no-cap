@@ -17,9 +17,9 @@ function todayUTC() {
     return new Date().toISOString().slice(0, 10);
 }
 
-function publicShape(round) {
+function publicShape(id, round) {
     return {
-        roundId: round.roundId,
+        roundId: id,
         category: round.category,
         field: round.field,
         shown: round.shown,
@@ -34,10 +34,9 @@ app.get("/api/round", async (req, res) => {
         const category = req.query.category || "crypto";
         const round = await buildRound(category);
         const roundId = crypto.randomUUID();
-        const record = { roundId, ...round, createdAt: Date.now() };
-        rounds.set(roundId, record);
+        rounds.set(roundId, { ...round, createdAt: Date.now() });
         setTimeout(() => rounds.delete(roundId), ROUND_TTL_MS);
-        res.json(publicShape(record));
+        res.json(publicShape(roundId, round));
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -82,13 +81,13 @@ app.get("/api/daily", async (req, res) => {
         if (!cached) {
             const seq = await buildDailySequence(date, 5);
             const ids = seq.map(() => crypto.randomUUID());
-            seq.forEach((r, i) => rounds.set(ids[i], { roundId: ids[i], ...r, createdAt: Date.now() }));
+            seq.forEach((r, i) => rounds.set(ids[i], { ...r, createdAt: Date.now() }));
             cached = { rounds: seq, ids };
             dailyCache.set(date, cached);
         }
         res.json({
             date,
-            rounds: cached.ids.map((id) => publicShape(rounds.get(id))),
+            rounds: cached.ids.map((id, i) => publicShape(id, cached.rounds[i])),
         });
     } catch (err) {
         res.status(500).json({ error: err.message });

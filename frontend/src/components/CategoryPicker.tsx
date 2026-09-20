@@ -16,7 +16,7 @@ interface Props {
 export function CategoryPicker({ selected, onSelect, onStart }: Props) {
     return (
         <section className="panel">
-            <p className="lede">Two real assets. One CMC stat. You call it — higher, or no cap (lower).</p>
+            <p className="lede">Two real assets. One CMC stat. You call it - higher, or no cap (lower).</p>
             <div className="category-row">
                 {CATEGORIES.map((c) => (
                     <button
