@@ -1,0 +1,41 @@
+{
+  "players": {
+    "d42110a6-4aa1-49fa-b27c-8f42b248de53": {
+      "id": "d42110a6-4aa1-49fa-b27c-8f42b248de53",
+      "rating": 1000,
+      "gamesPlayed": 6,
+      "correctCount": 3,
+      "bestStreak": 2
+    }
+  },
+  "leaderboard": [
+    {
+      "name": "ted",
+      "streak": 2,
+      "category": "derivatives",
+      "at": "2026-09-28T21:35:43.020Z"
+    }
+  ],
+  "pulse": {
+    "totalRounds": 6,
+    "totalCorrect": 3,
+    "categories": {
+      "crypto": {
+        "played": 2,
+        "correct": 0
+      },
+      "rwa": {
+        "played": 1,
+        "correct": 1
+      },
+      "dex": {
+        "played": 1,
+        "correct": 1
+      },
+      "derivatives": {
+        "played": 2,
+        "correct": 1
+      }
+    }
+  }
+}

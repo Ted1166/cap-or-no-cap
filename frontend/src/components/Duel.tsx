@@ -50,6 +50,17 @@ export function Duel({ round, result, onGuess, onNext, nextLabel, guessing }: Pr
                     <div className={`verdict-tag ${result.correct ? "true" : "cap"}`}>
                         {result.correct ? "✅ FACTS — you called it" : "❌ CAP — that's a miss"}
                     </div>
+                    <div className="difficulty-row">
+                        <span className={`difficulty-chip difficulty-${result.difficulty.label.toLowerCase()}`}>
+                            {result.difficulty.label} · {result.difficulty.pct}% apart
+                        </span>
+                        {result.ratingDelta !== null && (
+                            <span className={`rating-delta ${result.ratingDelta >= 0 ? "up" : "down"}`}>
+                                {result.ratingDelta >= 0 ? "+" : ""}
+                                {result.ratingDelta} rating
+                            </span>
+                        )}
+                    </div>
                     <p className="explanation">{result.explanation}</p>
                     <button className="cta" onClick={onNext}>
                         {nextLabel}

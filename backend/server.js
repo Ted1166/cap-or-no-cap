@@ -4,11 +4,13 @@ const cors = require("cors");
 const crypto = require("crypto");
 const { buildRound, buildDailySequence } = require("./lib/rounds");
 const { explainRound } = require("./lib/explain");
+const store = require("./lib/store");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+const db = store.load();
 const rounds = new Map();
 const ROUND_TTL_MS = 5 * 60 * 1000;
 const dailyCache = new Map();
@@ -44,7 +46,7 @@ app.get("/api/round", async (req, res) => {
 
 app.post("/api/guess", async (req, res) => {
     try {
-        const { roundId, guess } = req.body;
+        const { roundId, guess, playerId, currentStreak } = req.body;
         const round = rounds.get(roundId);
         if (!round) return res.status(404).json({ error: "Round expired or not found" });
 
@@ -55,11 +57,21 @@ app.post("/api/guess", async (req, res) => {
         const winner = round.hidden.value >= round.shown.value ? round.hidden : round.shown;
         const loser = winner === round.hidden ? round.shown : round.hidden;
 
+        const difficulty = store.difficultyFor(round.shown.value, round.hidden.value);
+
         const explanation = await explainRound({
             category: round.category,
             label: round.field.label,
             winner,
             loser,
+        });
+
+        const ratingInfo = store.applyGuessResult(db, {
+            playerId,
+            category: round.category,
+            correct,
+            currentStreak,
+            difficulty,
         });
 
         rounds.delete(roundId);
@@ -68,6 +80,9 @@ app.post("/api/guess", async (req, res) => {
             hiddenValue: round.hidden.value,
             hiddenAsset: { name: round.hidden.name, symbol: round.hidden.symbol },
             explanation,
+            difficulty,
+            rating: ratingInfo ? ratingInfo.rating : null,
+            ratingDelta: ratingInfo ? ratingInfo.delta : null,
         });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -92,6 +107,27 @@ app.get("/api/daily", async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+});
+
+app.get("/api/pulse", (_req, res) => {
+    res.json(store.getPulseSummary(db));
+});
+
+app.get("/api/leaderboard", (_req, res) => {
+    res.json({ leaderboard: db.leaderboard });
+});
+
+app.post("/api/leaderboard", (req, res) => {
+    const { name, streak, category } = req.body;
+    if (!name || typeof streak !== "number") {
+        return res.status(400).json({ error: "name and streak are required" });
+    }
+    const leaderboard = store.submitLeaderboard(db, { name, streak, category });
+    res.json({ leaderboard });
+});
+
+app.get("/api/player/:id", (req, res) => {
+    res.json(store.getPlayer(db, req.params.id));
 });
 
 const PORT = process.env.PORT || 8787;

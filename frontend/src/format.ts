@@ -6,3 +6,7 @@ export function formatValue(n: number, fieldKey: string): string {
   if (Math.abs(n) >= 1e3) return `$${(n / 1e3).toFixed(1)}K`;
   return `$${n.toFixed(2)}`;
 }
+
+export function formatPercent(n: number): string {
+  return `${Math.round(n * 100)}%`;
+}
